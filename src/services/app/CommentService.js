@@ -50,5 +50,34 @@ const postComment = async (userid, momentid, content, createdat) => {
     console.log('failed to post comment: "' + error.message);
   }
 };
+//xoa comment
+const deleteComment = async (id) => {
+  console.log("adadadad");
+  try {
+    const res = await commentModel.deleteOne({ _id: id });
+  
+    if (res) {
+      return true;
+    }
+    return false;
+  } catch (error) {
+    console.log("Error deleting moment: " + error.message);
+  }
 
-module.exports = { getMomentsComment, postComment };
+}; 
+// cập nhật binh luan
+const updateComment = async (id, content) => {
+  try {
+    const comment = await commentModel.findById(id);
+    if (comment) {
+      comment.content = content ? content : comment.content;    
+      await comment.save();
+      return comment;
+    }
+    return null;
+  } catch (error) {
+    console.log("failed to update comment: ", error.message);
+  }
+};
+
+module.exports = { getMomentsComment, postComment,deleteComment,updateComment };

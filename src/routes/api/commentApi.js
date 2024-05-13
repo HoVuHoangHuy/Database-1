@@ -36,4 +36,38 @@ router.post("/postComments", async (req, res) => {
     return res.status(400).json({ result: false, error: error });
   }
 });
+// xóa một binh luan
+// http://localhost:3000/api/comments/deleteComment/:idComment
+router.get("/deleteComment/:idComment", async (req, res, next) => {
+  try {
+    const { idComment } = req.params;
+    console.log(idComment);
+    const response = await commentsController.deleteComment(idComment);
+    if (response) {
+      return res.status(200).json({ result: true });
+    }
+    return res.status(500).json({ result: false });
+  } catch (error) {
+    return res.status(400).json({ result: false, error: error.message });
+  }
+});
+// cập nhật binh luan
+// http://localhost:3000/api/comments/updateComment
+router.post("/updateComment", async (req, res, next) => {
+  try {
+    const { id, content } = req.body;
+    const comment = await commentsController.updateComment(
+      id,
+      content
+    );
+    if (comment) {
+      return res.status(200).json({ result: true, comment: comment });
+    }
+    return res.status(500).json({ result: false, comment: null });
+  } catch (error) {
+    return res.status(500).json({ result: false, comment: null });
+  }
+});
+
+
 module.exports = router;
